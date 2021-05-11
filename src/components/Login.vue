@@ -7,7 +7,7 @@
       <el-input placeholder="请输入密码" v-model="form.password" show-password></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="onSubmit">登录</el-button>
+      <el-button type="primary" @click="login">登录</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -21,6 +21,18 @@ export default {
         user_name: '',
         password: ''
       }
+    }
+  },
+
+  methods:{
+    login(){
+      this.$axios({
+        url: this.GLOABALUSE.API_BASE_URL+'/user/login',
+        method: "post",
+        params: {username: this.username, password:this.password}
+      }).then(res => {
+        console.log(res)
+      })
     }
   }
 }
