@@ -1,3 +1,4 @@
+//全局的公共方法和常量
 export const API_BASE_URL = 'http://testErp.com'
 
 function commonFun() {
