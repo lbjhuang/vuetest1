@@ -10,11 +10,11 @@ import App from './App.vue';
 import '../public/public.css'
 Vue.use(ElementUI);
 
-//import VueRouter from 'vue-router'
-//Vue.use(VueRouter)
+import VueRouter from 'vue-router'
+Vue.use(VueRouter)
 
 //引用router.js 路由
-//import router from './router.js'
+import router from './router'
 
 //引用全局常量和方法等作为vue的属性
 import globalUse from './gloabal.js'
@@ -22,6 +22,6 @@ Vue.prototype.GLOABALUSE = globalUse
 
 new Vue({
   el: '#app',
-  //router,
+  router,
   render: h => h(App)
 });
