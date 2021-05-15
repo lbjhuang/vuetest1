@@ -9,6 +9,9 @@
         <el-form-item label="密码" prop="password">
           <el-input placeholder="请输入密码" v-model="form_data.password" show-password></el-input>
         </el-form-item>
+        <el-form-item label="确认密码" prop="confirm_password">
+          <el-input placeholder="" v-model="form_data.confirm_password" show-password></el-input>
+        </el-form-item>
         <el-form-item label="验证码" prop="code">
           <div class="demo-image">
             <el-input placeholder="请输入验证码" style="width: 130px;" v-model="form_data.password"></el-input>
@@ -22,8 +25,7 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">登录</el-button>
-          <el-button type="primary" @click="$router.push('register')">注册</el-button>
+          <el-button type="primary" @click="onSubmit('form')">注册</el-button>
         </el-form-item>
       </el-form>
 
@@ -34,12 +36,22 @@
 
 <script>
 export default {
-  name: "Login",
+  name: "Register",
   data() {
+    var validate_confirm_password = (rule, value, callback) => {
+      if (value === '') {
+        callback(new Error('请再次输入密码'))
+      } else if (value !== this.form_data.password) {
+        callback(new Error('两次输入密码不一致!'))
+      } else {
+        callback()
+      }
+    }
     return {
       form_data: {
         username: '',
         password: '',
+        confirm_password: '',
         code_url: '',
       },
       // 表单验证，需要在 el-form-item 元素中增加 prop 属性
@@ -49,6 +61,9 @@ export default {
         ],
         password: [
           {required: true, message: '密码不可为空', trigger: 'blur'}
+        ],
+        confirm_password: [
+          {required: true, validate: validate_confirm_password, trigger: 'blur'}
         ]
       },
 
@@ -71,8 +86,8 @@ export default {
       })
     },
 
-    login() {
-      this.$router.push("/welcome");
+    register() {
+      this.$router.push("/login");
       //this.$axios({
       //  url: this.GLOABALUSE.API_BASE_URL+'/user/login',
       //  method: "post",
@@ -92,8 +107,7 @@ export default {
       // 为表单绑定验证功能
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          //前端验证成功则进行后台验证后登录
-          this.login();
+          this.register();
         } else {
           //this.$message.error('用户名或密码不对哦^_^');
           return false;

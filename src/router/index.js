@@ -3,6 +3,7 @@ import Router from 'vue-router'
 Vue.use(Router);
 
 import Login from "../components/Login"
+import Register from "../components/Register"
 import Welcome from '../components/Welcome'
 
 // const originalPush = Router.prototype.push
@@ -12,6 +13,12 @@ import Welcome from '../components/Welcome'
 
 export default new Router({
     routes: [
+        {
+            // 注册页
+            path: '/register',
+            name: 'Register',
+            component: Register
+        },
         {
             //默认跳转登录
             path: '/',
