@@ -22,7 +22,11 @@
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">登录</el-button>
+          <el-button type="primary" style="margin-left: 10px" @click="onSubmit('form')">登录</el-button>
+          <el-button @click="send" type="success" :disabled="!show">
+            获取验证码
+            <span v-show="!show" class="count">({{ count }}s)</span>
+          </el-button>
           <el-button type="primary" @click="$router.push('register')">注册</el-button>
         </el-form-item>
       </el-form>
@@ -33,10 +37,13 @@
 </template>
 
 <script>
+const TIME_COUNT = 60; //更改倒计时时间
 export default {
   name: "Login",
   data() {
     return {
+      show: true, // 初始启用按钮
+      count: '', // 初始化次数
       form_data: {
         username: '',
         password: '',
@@ -55,12 +62,12 @@ export default {
     }
   },
   created: function () {
-    this.getCode()
+    //this.getCode()
   },
   methods: {
-    getCode(){
+    getCode() {
       this.$axios({
-        url: this.GLOABALUSE.API_BASE_URL + '/user/getLoginCode',
+        url: this.GLOABALUSE.API_BASE_URL + '/user/getLoginCode/scene/user_register',
         method: "get",
         params: {},
         responseType: 'blob'
@@ -87,6 +94,22 @@ export default {
       //})
     },
 
+    send() {
+      this.getCode()
+      if (!this.timer) {
+        this.count = TIME_COUNT;
+        this.show = false;
+        this.timer = setInterval(() => {
+          if (this.count > 0 && this.count <= TIME_COUNT) {
+            this.count--;
+          } else {
+            this.show = true;
+            clearInterval(this.timer); // 清除定时器
+            this.timer = null;
+          }
+        }, 1000)
+      }
+    },
 
     onSubmit(formName) {
       // 为表单绑定验证功能
@@ -129,5 +152,9 @@ export default {
   -webkit-border-radius: 5px;
   -moz-border-radius: 5px;
   box-shadow: 0 0 25px #909399;
+}
+
+.submit{
+  margin-left: 39px !important;
 }
 </style>

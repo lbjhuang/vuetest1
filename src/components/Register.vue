@@ -18,14 +18,18 @@
             <el-image
                 style="width: 100px; height: 30px; cursor:pointer; overflow: inherit; margin-left: 40px;margin-top:5px"
                 :src="form_data.code_url"
-                title="点击更换"
-                @click="getCode()"
             >
             </el-image>
           </div>
         </el-form-item>
         <el-form-item>
-          <el-button type="primary" @click="onSubmit('form')">注册</el-button>
+          <el-button @click="onSubmit" type="primary" style="margin-right: 14px">
+            提交注册
+          </el-button>
+          <el-button @click="send" type="success" :disabled="!show">
+            获取验证码
+            <span v-show="!show" class="count">({{count}}s)</span>
+          </el-button>
         </el-form-item>
       </el-form>
 
@@ -35,6 +39,7 @@
 </template>
 
 <script>
+const TIME_COUNT = 60; //更改倒计时时间
 export default {
   name: "Register",
   data() {
@@ -48,6 +53,8 @@ export default {
       }
     }
     return {
+      show: true, // 初始启用按钮
+      count: '', // 初始化次数
       form_data: {
         username: '',
         password: '',
@@ -70,7 +77,7 @@ export default {
     }
   },
   created: function () {
-    this.getCode()
+    //this.getCode()
   },
   methods: {
     getCode(){
@@ -102,6 +109,22 @@ export default {
       //})
     },
 
+    send() {
+      this.getCode()
+      if (!this.timer) {
+        this.count = TIME_COUNT;
+        this.show = false;
+        this.timer = setInterval(() => {
+          if (this.count > 0 && this.count <= TIME_COUNT) {
+            this.count--;
+          } else {
+            this.show = true;
+            clearInterval(this.timer); // 清除定时器
+            this.timer = null;
+          }
+        }, 1000)
+      }
+    },
 
     onSubmit(formName) {
       // 为表单绑定验证功能
