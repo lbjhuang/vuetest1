@@ -32,7 +32,7 @@
 </template>
 
 <script>
-const TIME_COUNT = 60; //更改倒计时时间
+const TIME_COUNT = 60; //倒计时的秒数
 export default {
   name: "Login",
   data() {
