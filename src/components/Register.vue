@@ -14,7 +14,7 @@
         </el-form-item>
         <el-form-item label="验证码" prop="code">
           <div class="demo-image">
-            <el-input placeholder="请输入验证码" style="width: 130px;" v-model="form_data.password"></el-input>
+            <el-input placeholder="请输入验证码" style="width: 180px;" v-model="form_data.code"></el-input>
             <el-image
                 style="width: 100px; height: 30px; cursor:pointer; overflow: inherit; margin-left: 40px;margin-top:5px"
                 :src="form_data.code_url"
@@ -59,6 +59,7 @@ export default {
         username: '',
         password: '',
         confirm_password: '',
+        code: '',
         code_url: '',
       },
       // 表单验证，需要在 el-form-item 元素中增加 prop 属性
@@ -70,7 +71,10 @@ export default {
           {required: true, message: '密码不可为空', trigger: 'blur'}
         ],
         confirm_password: [
-          {required: true, validate: validate_confirm_password, trigger: 'blur'}
+          {required: true, validator: validate_confirm_password, trigger: 'blur'}
+        ],
+        code: [
+          {required: true, message: '验证码不能为空', trigger: 'blur'}
         ]
       },
 
@@ -82,7 +86,7 @@ export default {
   methods: {
     getCode(){
       this.$axios({
-        url: this.GLOABALUSE.API_BASE_URL + '/user/getLoginCode',
+        url: this.GLOABALUSE.API_BASE_URL + '/user/getLoginCode/scene/user_register',
         method: "get",
         params: {},
         responseType: 'blob'
@@ -159,7 +163,7 @@ export default {
 
 .login-box {
   border: 1px solid #DCDFE6;
-  width: 350px;
+  width: 400px !important;
   margin: 280px 500px;
   padding: 35px 35px 15px 35px;
   border-radius: 5px;

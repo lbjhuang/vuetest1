@@ -1,37 +1,32 @@
 <template>
   <div class="background">
-    <div class="form">
-      <el-form ref="form" :model="form_data" :rules="rules" width="100%" height="100%" label-width="80px"
-               class="login-box">
-        <el-form-item label="用户名" prop="username">
-          <el-input v-model="form_data.username"></el-input>
-        </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input placeholder="请输入密码" v-model="form_data.password" show-password></el-input>
-        </el-form-item>
-        <el-form-item label="验证码" prop="code">
-          <div class="demo-image">
-            <el-input placeholder="请输入验证码" style="width: 130px;" v-model="form_data.password"></el-input>
-            <el-image
-                style="width: 100px; height: 30px; cursor:pointer; overflow: inherit; margin-left: 40px;margin-top:5px"
-                :src="form_data.code_url"
-                title="点击更换"
-                @click="getCode()"
-            >
-            </el-image>
-          </div>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" style="margin-left: 10px" @click="onSubmit('form')">登录</el-button>
-          <el-button @click="send" type="success" :disabled="!show">
-            获取验证码
-            <span v-show="!show" class="count">({{ count }}s)</span>
-          </el-button>
-          <el-button type="primary" @click="$router.push('register')">注册</el-button>
-        </el-form-item>
-      </el-form>
-
-    </div>
+    <el-form ref="form" :model="form_data" :rules="rules" width="100%" height="100%" label-width="80px"
+             class="login-box">
+      <el-form-item label="用户名" prop="username">
+        <el-input v-model="form_data.username"></el-input>
+      </el-form-item>
+      <el-form-item label="密码" prop="password">
+        <el-input placeholder="请输入密码" v-model="form_data.password" show-password></el-input>
+      </el-form-item>
+      <el-form-item label="验证码" prop="code">
+        <el-input placeholder="请输入验证码" style="width: 180px;" v-model="form_data.code"></el-input>
+        <el-image
+            style="width: 100px; height: 30px; cursor:pointer; overflow: inherit; margin-left: 40px;margin-top:5px"
+            :src="form_data.code_url"
+            title="点击更换"
+            @click="getCode()"
+        >
+        </el-image>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit('form')">登录</el-button>
+        <el-button @click="send" type="success" :disabled="!show">
+          获取验证码
+          <span v-show="!show" class="count">({{ count }}s)</span>
+        </el-button>
+        <el-button type="primary" @click="$router.push('register')">注册</el-button>
+      </el-form-item>
+    </el-form>
   </div>
 
 </template>
@@ -47,6 +42,7 @@ export default {
       form_data: {
         username: '',
         password: '',
+        code: '',
         code_url: '',
       },
       // 表单验证，需要在 el-form-item 元素中增加 prop 属性
@@ -56,6 +52,9 @@ export default {
         ],
         password: [
           {required: true, message: '密码不可为空', trigger: 'blur'}
+        ],
+        code: [
+          {required: true, message: '验证码不可为空', trigger: 'blur'}
         ]
       },
 
@@ -67,7 +66,7 @@ export default {
   methods: {
     getCode() {
       this.$axios({
-        url: this.GLOABALUSE.API_BASE_URL + '/user/getLoginCode/scene/user_register',
+        url: this.GLOABALUSE.API_BASE_URL + '/user/getLoginCode/scene/user_login',
         method: "get",
         params: {},
         responseType: 'blob'
@@ -145,8 +144,8 @@ export default {
 
 .login-box {
   border: 1px solid #DCDFE6;
-  width: 350px;
-  margin: 280px 500px;
+  width: 400px !important;
+  margin: 280px 200px;
   padding: 35px 35px 15px 35px;
   border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -154,7 +153,7 @@ export default {
   box-shadow: 0 0 25px #909399;
 }
 
-.submit{
+.submit {
   margin-left: 39px !important;
 }
 </style>
